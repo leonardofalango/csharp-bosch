@@ -1,31 +1,78 @@
 ﻿using System;
 
-char c = 'a';
-string str = "new string";
+// conseguimos declarar funcao dentro de funcao
+// por isso é possível declarar funções aqui
+void merge_sort_ref(
+    int[] arr,
+    int[] arr_aux,
+    int inicio, int fim)
+{
+    if (fim - inicio < 2)
+        return;
+    int pivo = (inicio + fim) / 2;
+    merge_sort_ref(arr, arr_aux, inicio, pivo);
+    merge_sort_ref(arr, arr_aux, pivo, fim);
+    merge(arr, arr_aux, inicio, pivo, fim);
 
-byte b = 200;
-short s = 1000;
-int i = 20000000;
-long l = 3000000000000;
-
-sbyte sb = -100;
-ushort us = 1000;
-uint ui = 20000000;
-ulong ul = 3000000000000;
-
-long overFlowCheck = checked(long.MaxValue + l); // o comando checked não deixa dar stackoverflow
-
-
-object obj = s; // Todas as classes herdem de object, ele é o tipo básico do C#
-dynamic dy = 8;
-dy = "hello world";
+}
 
 
-int[] arr = new int[10];
-//int nulo = null; ints nao aceitam nulo como um valor
-int? nulo = null;
+void merge(
+    int[] arr,
+    int[] arr_aux,
+    int inicio_primeiro, int inicio_segundo, int fim)
+{
+    int i = inicio_primeiro, j = inicio_segundo, k = inicio_primeiro;
+
+    while (i < inicio_segundo && j < fim)
+    {
+        if (arr[i] < arr[j])
+        {
+            arr_aux[k] = arr[i];
+            i++; k++;
+        }
+        else
+        {
+            arr_aux[k] = arr[j];
+            k++; j++;
+        }
+    }
+
+    while (i < inicio_segundo)
+    {
+        arr_aux[k] = arr[i];
+        i++; k++;
+    }
+
+    while (j < fim)
+    {
+        arr_aux[k] = arr[j];
+        k++;j++;
+    }
+
+    for (int index = inicio_primeiro; index < fim; index++){
+        arr[index] = arr_aux[index];
+    }
+
+}
+
+
+void merge_sort(int[] arr)
+{
+    int fim = arr.Length;
+    int[] arr_aux = new int[fim];
+    merge_sort_ref(arr, arr_aux, 0, fim);
+}
 
 
 
+int[] array = new int[10] {7, 8, 2, 3, 1, 2, 5, 9, 4, 10};
 
-Console.WriteLine("Hello, World!");
+foreach (var n in array)
+    Console.Write($"{n} |");
+
+Console.WriteLine();
+merge_sort(array);
+
+foreach (var n in array)
+    Console.Write($"{n} |");
