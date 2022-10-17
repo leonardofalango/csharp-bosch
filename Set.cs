@@ -1,7 +1,21 @@
 public abstract class Set
 {
     public abstract bool IsIn(Set set);
-    public abstract Set Union(Set set);
+    public virtual Set Union(Set set)
+    {
+    UnionSet unionSet = new UnionSet();
+    unionSet.A = this;
+    unionSet.B = set;
+    return unionSet;
+    }
+
+    public virtual Set Intersect(Set set)
+    {
+        IntersectionSet interSet = new IntersectionSet();
+        interSet.A = this;
+        interSet.B = set;
+        return interSet;
+    }
 
 }
 
@@ -23,6 +37,35 @@ public class UnionSet : Set
         return unionSet;
     }
 }
+
+
+public class IntersectionSet : Set
+{
+    public Set A { get; set; }
+    public Set B { get; set; }
+
+    public override bool IsIn(Set set)
+    {
+        return A.IsIn(set) || B.IsIn(set);
+    }
+
+    public override Set Union(Set set)
+    {
+        UnionSet unionSet = new UnionSet();
+        unionSet.A = this;
+        unionSet.B = set;
+        return unionSet;
+    }
+
+    public override Set Intersect(Set set)
+    {
+        IntersectionSet interSet = new IntersectionSet();
+        interSet.A = this;
+        interSet.B = set;
+        return interSet;
+    }
+}
+
 
 
 public class EmptySet : Set
